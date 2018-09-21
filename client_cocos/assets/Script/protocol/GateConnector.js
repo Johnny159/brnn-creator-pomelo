@@ -1,9 +1,10 @@
 require("../pomelo/pomelo-client");
 
-var GateConnector = function () { }
+var GateConnector = function () {
 
-module.exports = GateConnector;
+}
 
+// 
 GateConnector.onLoginSuccess = function (data, callback) {
     pomelo.userinfo = data['data']['userinfo'];
     pomelo.connector = data['data']['localConnector'];
@@ -47,6 +48,7 @@ GateConnector.gateRefreshToken = function (host, port, callback) {
     });
 }
 
+// 
 GateConnector.connectToConnector = function (callback) {
     var host = pomelo.connector.host;
     var port = pomelo.connector.port;
@@ -70,9 +72,14 @@ GateConnector.connectorEnterRoom = function (rtype, rid, callback) {
     pomelo.request('connector.entryHandler.enterRoom', data, callback);
 }
 
+// 
 GateConnector.connectorExit = function (callback) {
     pomelo.request('connector.entryHandler.exit', function () {
         pomelo.disconnect();
         callback();
     });
 }
+
+
+// 导出
+module.exports = GateConnector;

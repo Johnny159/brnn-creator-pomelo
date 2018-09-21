@@ -1,15 +1,15 @@
 require("../pomelo/pomelo-client");
 
-var BrnnProto = function () {}
+var BrnnProto = function () { }
 
 module.exports = BrnnProto;
 
+// 玩家下注
 BrnnProto.chipIn = function (gold, pkindex, callback) {
     var data = {};
     data.userid = pomelo.userinfo.userid;
     data.gold = gold;
     data.pkindex = pkindex;
-
     pomelo.request('brnn.brnnHandler.chipIn', data, callback);
 }
 
@@ -38,7 +38,8 @@ BrnnProto.onGoldResult = function (callback) {
     pomelo.on('brnn.onGoldResult', callback);
 }
 
-BrnnProto.disableEvent = function() {
+// 注销所有百人牛牛游戏界面网络事件
+BrnnProto.disableEvent = function () {
     pomelo.removeAllListeners('brnn.onGoldResult');
     pomelo.removeAllListeners('brnn.onDealPoker');
     pomelo.removeAllListeners('brnn.onWillStart');

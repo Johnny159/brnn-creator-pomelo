@@ -7,16 +7,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
         buttonExit: {
             default: null,
             type: cc.Button
@@ -73,7 +63,6 @@ cc.Class({
             var cpscript = cp.getComponent('ChipViewScript');
             this.chipViewSC.push(cpscript);
         }
-
         this.totalMoney.string = pomelo.userinfo.gold.toString();
     },
 
@@ -154,8 +143,10 @@ cc.Class({
         });
     },
 
-    //下注金额按钮点击事件
-    //chipin 是下注金额
+    /**
+     * 下注金额按钮点击事件
+     * chipin 是下注金额
+     */
     buttonChipInTap: function (event, chipin) {
         this.brnnChipSelect = parseInt(chipin);
     },
@@ -181,8 +172,10 @@ cc.Class({
         });
     },
 
-    //update state and time ui
-    //time < 0 的时候隐藏imagetime
+    /**
+     * 更新客户端下注状态 和 倒计时时间
+     * time < 0 的时候隐藏imagetime
+     */
     updateStateAndTime: function (state, time) {
         //update time
         this.timeLabel.node.active = (time >= 0);
@@ -262,6 +255,5 @@ cc.Class({
     },
 
     // update: function (dt) {
-
     // },
 });

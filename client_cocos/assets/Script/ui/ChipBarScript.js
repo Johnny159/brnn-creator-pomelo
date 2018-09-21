@@ -1,17 +1,10 @@
+/**
+ * 
+ */
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
 
         chipItemList: null,    //下注的item列表
 
@@ -61,6 +54,7 @@ cc.Class({
         this.runSelectActionOnNode(tmpNode);
     },
 
+    //
     stopAllChipAction: function () {
         for (var index = 0; index < this.chipItemList.length; index++) {
             var chd = this.chipItemList[index];
@@ -69,12 +63,14 @@ cc.Class({
         }
     },
 
+    //
     onChipClick: function (event) {
         this.stopAllChipAction();
         var anode = event.target;
         this.runSelectActionOnNode(anode);
     },
 
+    //
     runSelectActionOnNode: function (aNode) {
         var j1 = cc.jumpBy(0.2, cc.p(0, 0), 20, 1);
         var j2 = cc.jumpBy(0.15, cc.p(0, 0), 10, 1);
@@ -86,6 +82,7 @@ cc.Class({
         this.selectChipItem = aNode;
     },
 
+    //
     runChipItemMoveAnimation: function (posToWorld, finishiCallback, target) {
         var posNode = this.node.convertToNodeSpaceAR(posToWorld);
         var self = this;
@@ -100,6 +97,5 @@ cc.Class({
     },
 
     // update: function (dt) {
-
     // },
 });

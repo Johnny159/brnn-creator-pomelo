@@ -56,9 +56,11 @@ cc.Class({
         });
     },
 
-    //绑定数据model
-    //pokerList：牌数组
-    //result：   结果数据
+    /**
+     * 绑定数据model
+     * pokerList：牌数组
+     * result：   结果数据
+     */
     bindPokers: function (pokerList, result) {
         this.myPokerList = pokerList;
         this.myResult = result;
@@ -69,16 +71,21 @@ cc.Class({
         if (total) {
             this.labelTotal.string = total;
         }
-
         this.labelMine.string = mine;
     },
 
     //延迟一定时间开始发牌动画
     pokerAnimationDelay: function (delay) {
+        
+        //
         if (this.myPokerList.length <= 0) {
             return;
         }
+
+        //
         this.myPokerNodes = new Array();
+
+        //
         for (var index = 0; index < this.myPokerList.length; index++) {
             var element = this.myPokerList[index];
             var pkitem = cc.instantiate(this.pokerPrefab);
@@ -95,9 +102,8 @@ cc.Class({
         }
     },
 
-    //
+    //移动-》翻转显示正面
     pokerMoveOverCallback: function (pkitem) {
-        //移动-》翻转显示正面
         var PokerItemSC = pkitem.getComponent('PokerItem');
         PokerItemSC.animationFlipTo(true, this.pokerFlipOverCallback, this);
     },
