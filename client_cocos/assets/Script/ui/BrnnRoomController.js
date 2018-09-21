@@ -23,23 +23,23 @@ cc.Class({
         },
 
         stateSprite: {
-            default: null, 
+            default: null,
             type: cc.Sprite
         },
 
         timeLabel: {
-            default: null, 
+            default: null,
             type: cc.Label
         },
 
         totalMoney: {
-            default: null, 
+            default: null,
             type: cc.Label
         },
 
         chipLayout: {
             default: null,
-            type:cc.Layout
+            type: cc.Layout
         },
 
         masterView: {
@@ -63,7 +63,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.brnnChipInDic = {'1':0, '2':0, '3':0, '4':0};
+        this.brnnChipInDic = { '1': 0, '2': 0, '3': 0, '4': 0 };
         var masterViewSC = this.masterView.getComponent('ChipViewScript');
         this.chipViewSC.push(masterViewSC);
 
@@ -73,47 +73,47 @@ cc.Class({
             var cpscript = cp.getComponent('ChipViewScript');
             this.chipViewSC.push(cpscript);
         }
-        
+
         this.totalMoney.string = pomelo.userinfo.gold.toString();
     },
 
+    // 
     onEnable: function () {
         this.buttonExit.node.on('click', this.buttonExitTap, this);
         this.initBrnnEvent();
-        
+
         var chipBarScript = this.chipBar.getComponent('ChipBarScript');
         chipBarScript.startDefaultAction(this.brnnChipSelect);
     },
 
+    // 
     onDisable: function () {
         this.buttonExit.node.off('click', this.buttonExitTap, this);
         BrnnProto.disableEvent();
     },
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
 
-    // },
-
-    buttonExitTap: function(){
+    // 
+    buttonExitTap: function () {
         pomelo.disconnect();
         cc.director.loadScene('Login');  //离开后回到登录界面
     },
 
+    // 
     initBrnnEvent: function () {
         var self = this;
-        BrnnProto.onAdd(function(data){
+        BrnnProto.onAdd(function (data) {
             console.log(data);
         });
 
-        BrnnProto.onLeave(function(data){
+        BrnnProto.onLeave(function (data) {
             console.log(data);
         });
 
-        BrnnProto.onWillStart(function(data){
+        BrnnProto.onWillStart(function (data) {
             var res = new MResponse(data);
             if (res.hasError()) {
                 console.error(res.msg);
-                return ;
+                return;
             }
 
             self.brnnState = res.data['state'];
@@ -121,36 +121,36 @@ cc.Class({
             self.updateStateAndTime(self.brnnState, time);
         });
 
-        BrnnProto.onDealPoker(function(data){
+        BrnnProto.onDealPoker(function (data) {
             var res = new MResponse(data);
             if (res.hasError()) {
                 console.log(res.msg);
-                return ;
+                return;
             }
             self.brnnState = 1;
             self.updateStateAndTime(self.brnnState, -1);
             self.pushPokerToChipView(res.data['pokerRes']);
         });
 
-        BrnnProto.onGoldResult(function(data){
+        BrnnProto.onGoldResult(function (data) {
             var res = new MResponse(data);
             if (res.hasError()) {
                 console.log(res.msg);
-                return ;
+                return;
             }
             var goldArr = res.data;
-            goldArr.forEach(function(element) {
+            goldArr.forEach(function (element) {
                 if (element.userid == pomelo.userinfo.userid) {
                     self.totalMoney.string = element.totalGold.toString();
                 }
             }, this);
             self.brnnState = 2;
             self.updateStateAndTime(self.brnnState, -1);
-            self.brnnChipInDic = {'1':0, '2':0, '3':0, '4':0};
-            self.scheduleOnce(function() {
+            self.brnnChipInDic = { '1': 0, '2': 0, '3': 0, '4': 0 };
+            self.scheduleOnce(function () {
                 this.resetChipView();
             }, 3);
-            
+
         });
     },
 
@@ -161,20 +161,20 @@ cc.Class({
     },
 
     //下注牌点击事件，真正完成下注
-    buttonChipPokerTap: function(event, pkindex) {
+    buttonChipPokerTap: function (event, pkindex) {
         if (this.brnnState != 0) {
             console.log('下注时间已过');
-            return ;
+            return;
         }
         this.brnnChipInDic[pkindex] += this.brnnChipSelect;
 
         var self = this;
-        BrnnProto.chipIn(this.brnnChipInDic[pkindex], pkindex, function(data) {
+        BrnnProto.chipIn(this.brnnChipInDic[pkindex], pkindex, function (data) {
             var res = new MResponse(data);
             if (res.hasError()) {
                 console.log(res.msg);
                 self.brnnChipInDic[pkindex] -= self.brnnChipSelect;
-                return ;
+                return;
             }
             self.updateChipView(res.data);
             self.runChipItemMoveAnimation(event.target);
@@ -183,7 +183,7 @@ cc.Class({
 
     //update state and time ui
     //time < 0 的时候隐藏imagetime
-    updateStateAndTime : function (state, time) {
+    updateStateAndTime: function (state, time) {
         //update time
         this.timeLabel.node.active = (time >= 0);
         var fullTime = time;
@@ -195,15 +195,16 @@ cc.Class({
         //更新state
         var stateurl = 'png/brnnstate_' + state;
         var self = this;
-        cc.loader.loadRes(stateurl, cc.SpriteFrame, function(error, sf) {
+        cc.loader.loadRes(stateurl, cc.SpriteFrame, function (error, sf) {
             self.stateSprite.spriteFrame = sf;
         });
     },
 
-    updateChipView: function(mychip) {
+    // 
+    updateChipView: function (mychip) {
         for (var index = 1; index < 5; index++) {
             if (mychip[index] == null) {
-                continue ;
+                continue;
             }
             var childName = 'chipView' + index;
             var cp = this.chipLayout.node.getChildByName(childName);
@@ -212,6 +213,7 @@ cc.Class({
         }
     },
 
+    // 
     runChipItemMoveAnimation: function (aNode) {
         var cpscript = aNode.getComponent('ChipViewScript');
         var chipBarScript = this.chipBar.getComponent('ChipBarScript');
@@ -219,7 +221,8 @@ cc.Class({
         chipBarScript.runChipItemMoveAnimation(posWorld, cpscript.chipItemAnimationFinish, cpscript);
     },
 
-    resetChipView: function() {
+    // 
+    resetChipView: function () {
         var masterViewSC = this.masterView.getComponent('ChipViewScript');
         masterViewSC.resetState();
         for (var index = 1; index < 5; index++) {
@@ -230,14 +233,15 @@ cc.Class({
         }
     },
 
-    pushPokerToChipView: function(pokerGroup) {
+    //
+    pushPokerToChipView: function (pokerGroup) {
         if (pokerGroup.length !== 5) {
             console.log('pokerGroup长度不对');
-            return ;
+            return;
         }
         var masterPkItem = pokerGroup[0];
         var masterViewSC = this.chipViewSC[0];
-        masterViewSC.pokerPosFromWorld = new cc.Vec2(cc.winSize.width/2-160,cc.winSize.height/2+45);
+        masterViewSC.pokerPosFromWorld = new cc.Vec2(cc.winSize.width / 2 - 160, cc.winSize.height / 2 + 45);
         masterViewSC.bindPokers(masterPkItem['poker'], masterPkItem['result']);
         masterViewSC.pokerAnimationDelay(0);
 
@@ -247,12 +251,17 @@ cc.Class({
             cpscript.bindPokers(element['poker'], element['result']);
             cpscript.pokerAnimationDelay(0.1 * (index + 1));
         }
+
         //2s后展示牌面大小
-        this.scheduleOnce(function() {
+        this.scheduleOnce(function () {
             for (var index = 0; index < 5; index++) {
                 var cpscript = this.chipViewSC[index];
                 cpscript.showNiuNiu();
             }
         }, 2);
     },
+
+    // update: function (dt) {
+
+    // },
 });

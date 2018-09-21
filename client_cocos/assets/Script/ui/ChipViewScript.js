@@ -15,12 +15,12 @@ cc.Class({
         // },
         // ...
 
-        labelTotal : {
+        labelTotal: {
             default: null,
             type: cc.Label
         },
 
-        labelMine : {
+        labelMine: {
             default: null,
             type: cc.Label
         },
@@ -44,44 +44,39 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.pokerPosFromWorld = new cc.Vec2(cc.winSize.width/2-150,cc.winSize.height/2-30);
+        this.pokerPosFromWorld = new cc.Vec2(cc.winSize.width / 2 - 150, cc.winSize.height / 2 - 30);
         this.myChipItemNodes = new Array();
         var self = this;
-        cc.loader.loadRes('prefab/PokerItem', function(error, pref){
+        cc.loader.loadRes('prefab/PokerItem', function (error, pref) {
             if (error) {
                 console.error(error);
-                return ;
+                return;
             }
             self.pokerPrefab = pref;
         });
     },
 
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
-
     //绑定数据model
     //pokerList：牌数组
     //result：   结果数据
-    bindPokers: function(pokerList, result) {
+    bindPokers: function (pokerList, result) {
         this.myPokerList = pokerList;
         this.myResult = result;
     },
 
     //更新总下注金额、我的下注金额
-    updateGold: function(mine, total) {
+    updateGold: function (mine, total) {
         if (total) {
             this.labelTotal.string = total;
         }
-        
+
         this.labelMine.string = mine;
     },
 
     //延迟一定时间开始发牌动画
     pokerAnimationDelay: function (delay) {
         if (this.myPokerList.length <= 0) {
-            return ;
+            return;
         }
         this.myPokerNodes = new Array();
         for (var index = 0; index < this.myPokerList.length; index++) {
@@ -94,42 +89,42 @@ cc.Class({
             PokerItemSC.bindPokerModel(element);
             var viewsize = this.node.getContentSize();
             var pksize = pkitem.getContentSize();
-            var posTo = new cc.Vec2((index-2) * pksize.width * 0.8, 0);
+            var posTo = new cc.Vec2((index - 2) * pksize.width * 0.8, 0);
             PokerItemSC.animationMoveTo(delay + index * 0.1, posTo, this.pokerMoveOverCallback, this);
             this.myPokerNodes.push(pkitem);
         }
     },
 
-    pokerMoveOverCallback: function(pkitem) {
+    //
+    pokerMoveOverCallback: function (pkitem) {
         //移动-》翻转显示正面
         var PokerItemSC = pkitem.getComponent('PokerItem');
         PokerItemSC.animationFlipTo(true, this.pokerFlipOverCallback, this);
     },
 
-    pokerFlipOverCallback: function(pkitem) {
+    pokerFlipOverCallback: function (pkitem) {
         //do nothing
     },
 
-
     //重置ChipView上的状态
     //移除上面的扑克、赌注
-    resetState: function() {
+    resetState: function () {
         if (this.labelMine != null) {
-            this.labelMine.string = '0';   
+            this.labelMine.string = '0';
         }
         if (this.labelTotal != null) {
             this.labelTotal.string = '0';
         }
         if (this.myPokerNodes == null) {
-            return ;
+            return;
         }
-        this.myPokerNodes.forEach(function(element) {
+        this.myPokerNodes.forEach(function (element) {
             element.parent = null;
             element.destroy();
         }, this);
         this.myPokerNodes = null;
 
-        this.myChipItemNodes.forEach(function(element) {
+        this.myChipItemNodes.forEach(function (element) {
             element.parent = null;
             element.destroy();
         }, this);
@@ -180,18 +175,18 @@ cc.Class({
             muti = 1;
         }
         var self = this;
-        cc.loader.loadRes(resName, cc.SpriteFrame, function(error, spriteFrame){
-                var ppNode = new cc.Node('nntype');
-                var sprite = ppNode.addComponent(cc.Sprite);
-                sprite.spriteFrame = spriteFrame;
-                self.node.addChild(ppNode);
+        cc.loader.loadRes(resName, cc.SpriteFrame, function (error, spriteFrame) {
+            var ppNode = new cc.Node('nntype');
+            var sprite = ppNode.addComponent(cc.Sprite);
+            sprite.spriteFrame = spriteFrame;
+            self.node.addChild(ppNode);
 
-                var move = new cc.moveBy(0.5, 0, ppNode.getContentSize().height/8*5);
-                var scale = new cc.scaleTo(0.5, 0.5, 0.5);
-                var sp = new cc.spawn(move, scale);
-                ppNode.runAction(sp);
+            var move = new cc.moveBy(0.5, 0, ppNode.getContentSize().height / 8 * 5);
+            var scale = new cc.scaleTo(0.5, 0.5, 0.5);
+            var sp = new cc.spawn(move, scale);
+            ppNode.runAction(sp);
 
-                self.myPokerNodes.push(ppNode);
+            self.myPokerNodes.push(ppNode);
         });
 
         //输赢显示
@@ -214,7 +209,7 @@ cc.Class({
                 sprite.spriteFrame = spriteFrame;
                 self.node.addChild(ppNode);
 
-                var move = new cc.moveBy(0.5, 0, -ppNode.getContentSize().height/8*5);
+                var move = new cc.moveBy(0.5, 0, -ppNode.getContentSize().height / 8 * 5);
                 var scale = new cc.scaleTo(0.5, 0.5, 0.5);
                 var sp = new cc.spawn(move, scale);
                 ppNode.runAction(sp);
@@ -224,7 +219,8 @@ cc.Class({
         }
     },
 
-    positionOfCenterWorld : function () {
+    //
+    positionOfCenterWorld: function () {
         var rrr = cc.random0To1();
         if (rrr < 0.7) {
             //70%靠中间
@@ -242,6 +238,7 @@ cc.Class({
         }
     },
 
+    //
     chipItemAnimationFinish: function (chipItem) {
         var posWorld = chipItem.parent.convertToWorldSpaceAR(chipItem.getPosition());
         var posNode = this.node.convertToNodeSpaceAR(posWorld);

@@ -1,10 +1,10 @@
 require("../pomelo/pomelo-client");
 
-var GateConnector = function () {}
+var GateConnector = function () { }
 
 module.exports = GateConnector;
 
-GateConnector.onLoginSuccess = function(data, callback) {
+GateConnector.onLoginSuccess = function (data, callback) {
     pomelo.userinfo = data['data']['userinfo'];
     pomelo.connector = data['data']['localConnector'];
     // pomelo.connector = data['data']['remoteConnector'];
@@ -20,42 +20,42 @@ GateConnector.onLoginSuccess = function(data, callback) {
 }
 
 //guest login on gate
-GateConnector.gateGuestLogin = function(host, port, callback) {
+GateConnector.gateGuestLogin = function (host, port, callback) {
     pomelo.init({
-            host: host,
-            port: port,
-            user: {},
-            handshakeCallback: function () { }
-        }, function () {
-            pomelo.request('gate.gateHandler.guestLogin', {}, function (data) {
-                GateConnector.onLoginSuccess(data, callback);
-            });
+        host: host,
+        port: port,
+        user: {},
+        handshakeCallback: function () { }
+    }, function () {
+        pomelo.request('gate.gateHandler.guestLogin', {}, function (data) {
+            GateConnector.onLoginSuccess(data, callback);
         });
+    });
 }
 
 //guest login on gate
-GateConnector.gateRefreshToken = function(host, port, callback) {
+GateConnector.gateRefreshToken = function (host, port, callback) {
     pomelo.init({
-            host: host,
-            port: port,
-            user: {},
-            handshakeCallback: function () { }
-        }, function () {
-            pomelo.request('gate.gateHandler.refreshToken', {'token': cc.sys.localStorage.getItem('token')}, function (data) {
-                GateConnector.onLoginSuccess(data, callback);
-            });
+        host: host,
+        port: port,
+        user: {},
+        handshakeCallback: function () { }
+    }, function () {
+        pomelo.request('gate.gateHandler.refreshToken', { 'token': cc.sys.localStorage.getItem('token') }, function (data) {
+            GateConnector.onLoginSuccess(data, callback);
         });
+    });
 }
 
-GateConnector.connectToConnector = function(callback) {
+GateConnector.connectToConnector = function (callback) {
     var host = pomelo.connector.host;
     var port = pomelo.connector.port;
     pomelo.init({
-            host: host,
-            port: port,
-            user: {},
-            handshakeCallback: function () { }
-        }, callback);
+        host: host,
+        port: port,
+        user: {},
+        handshakeCallback: function () { }
+    }, callback);
 }
 
 //rtype room type
@@ -70,8 +70,8 @@ GateConnector.connectorEnterRoom = function (rtype, rid, callback) {
     pomelo.request('connector.entryHandler.enterRoom', data, callback);
 }
 
-GateConnector.connectorExit = function(callback) {
-    pomelo.request('connector.entryHandler.exit', function() {
+GateConnector.connectorExit = function (callback) {
+    pomelo.request('connector.entryHandler.exit', function () {
         pomelo.disconnect();
         callback();
     });
