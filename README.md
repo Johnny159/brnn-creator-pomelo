@@ -45,5 +45,7 @@ pomelo start
 CocosCreator 1.5+
 用ccc打开chess/client_cocos项目，直接运行即可
 ```
+效果图:
 
+![](./imgs/1.png)
 
