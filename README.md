@@ -1,4 +1,4 @@
-#大圣棋牌（Pomelo + Cocos Creator）
+#   大圣棋牌（Pomelo + Cocos Creator）
 ======
 网易pomelo框架 + CocosCreator客户端
 安卓+iOS+H5三端通用，同时支持分布式部署
@@ -6,7 +6,7 @@
 
 >十分欢迎大家贡献代码，尤其是ccc客户端，因为一个人又要开发服务器又要开发客户端，还要去搞美术，实在有些忙不过来
 
-#目前已有的功能和开发计划
+#   目前已有的功能和开发计划
 ======
 ```
 1、游客登录
@@ -18,7 +18,7 @@
 
 因为目前具有的功能较少，大家可以把它当做一个学习pomelo和cocos creator的入门项目对待
 
-#环境搭建
+#   环境搭建
 ======
 服务器支持Mac/Linux/Win
 服务器搭建教程(以Mac)：
@@ -32,10 +32,13 @@
 chess/game-server/config/mysql.json
 把该文件中的user  和  password 修改为上一步中mysql设置的用户名和密码
 7、运行服务器
+node 版本:6.11.1
 cd chess/game-server
 pomelo start
 
 到这里，如果不出意外，服务器就安装结束并且启动啦
+
+
 ```
 客户端开发环境
 ```

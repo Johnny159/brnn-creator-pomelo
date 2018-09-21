@@ -4,8 +4,8 @@
         "host" : "localhost",
         "port" : "3306",
         "database" : "chess",
-        "user" : "halloworld",
-        "password" : "5815057"
+        "user" : "root",
+        "password" : "jianan"
 	},
 
 	"production": {
@@ -13,7 +13,7 @@
 	    "host" : "localhost",
 		"port" : "3306",
 		"database" : "chess",
-		"user" : "halloworld",
-		"password" : "5815057"
+		"user" : "root",
+		"password" : "jianan"
 	}
 }

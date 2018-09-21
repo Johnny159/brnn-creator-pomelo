@@ -1,3 +1,6 @@
+/**
+ * 暂时废弃掉
+ */
 var GateConnector = require("../protocol/GateConnector");
 require("../pomelo/pomelo-client");
 
@@ -25,11 +28,18 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.buttonBrnnRoom.node.on('click', this.buttonBrnnRoomTap, this);
+        // this.buttonBrnnRoom.node.on('click', this.buttonBrnnRoomTap, this);
 
         GateConnector.connectToConnector(function () {
             console.log('Connect Success');
         });
+
+        var self = this;
+        this.node.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function(){
+            self.buttonBrnnRoomTap();
+        })));
+        //
+        
     },
 
     // called every frame, uncomment this function to activate update callback

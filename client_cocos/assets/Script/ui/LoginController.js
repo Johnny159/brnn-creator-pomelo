@@ -1,15 +1,10 @@
 var GateConnector = require("../protocol/GateConnector");
+require("../pomelo/pomelo-client");
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        label: {
-            default: null,
-            type: cc.Label
-        },
-        // defaults, set visually when attaching this script to the Canvas
-        text: 'Hello, World!',
 
         buttonGuestLogin: {
             default: null,
@@ -19,8 +14,6 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.label.string = this.text;
-
         this.buttonGuestLogin.node.on('click', this.btnGuestLoginTap, this);
     },
 
@@ -35,9 +28,30 @@ cc.Class({
         //         cc.director.loadScene('Home');
         //     });
         // } else {
-            GateConnector.gateGuestLogin('127.0.0.1', 3101, function (data) {
-                cc.director.loadScene('Home');
+        var self = this;
+        GateConnector.gateGuestLogin('127.0.0.1', 3101, function (data) {
+            // cc.director.loadScene('Home');
+
+            GateConnector.connectToConnector(function () {
+                console.log('Connect Success');
             });
+
+            //直接进入游戏场景
+            self.node.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
+                self.buttonBrnnRoomTap();
+            })));
+
+        });
         // }
-    }
+    },
+
+    buttonBrnnRoomTap: function () {
+        var param = {
+            'token': pomelo.token,
+            'rtype': 'brnn'
+        };
+        pomelo.request('connector.entryHandler.joinRoom', param, function (data) {
+            cc.director.loadScene('BrnnRoom');
+        });
+    },
 });

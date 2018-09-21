@@ -96,7 +96,7 @@ cc.Class({
 
     buttonExitTap: function(){
         pomelo.disconnect();
-        cc.director.loadScene('Home');
+        cc.director.loadScene('Login');  //离开后回到登录界面
     },
 
     initBrnnEvent: function () {
