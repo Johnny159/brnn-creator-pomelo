@@ -36,7 +36,7 @@ require("protocol");
     };
   }
 
-  var root = window;
+  var root = window;  // 全局变量
   var pomelo = Object.create(EventEmitter.prototype); // object extend from object
   root.pomelo = pomelo;
   var socket = null;
