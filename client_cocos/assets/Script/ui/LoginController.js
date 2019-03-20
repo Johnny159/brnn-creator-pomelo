@@ -1,4 +1,5 @@
 var GateConnector = require("../protocol/GateConnector");
+var game_config = require("./../config/game_config");
 require("../pomelo/pomelo-client");
 
 cc.Class({
@@ -9,12 +10,14 @@ cc.Class({
     },
 
     // use this for initialization
-    onLoad: function () { },
+    onLoad: function () { 
+        cc.director.setDisplayStats(false);
+    },
 
     onClick: function(event, customEventData){
         if(customEventData == "btn_guestLogin"){                                                  // 游客登陆
             var self = this;
-            GateConnector.gateGuestLogin('127.0.0.1', 3101, function (data) {
+            GateConnector.gateGuestLogin(game_config.gateway_config.HOST, game_config.gateway_config.PORT, function (data) {
                 GateConnector.connectToConnector(function () {
                     console.log('connectToConnector');
                     self.node.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {  // 直接进入游戏场景

@@ -5,21 +5,10 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        labelMsg: cc.Label,
 
-        labelMsg: {
-            default: null,
-            type: cc.Label
-        },
-
-        btnCancel: {
-            default: null,
-            type: cc.Button
-        },
-
-        btnOK: {
-            default: null,
-            type: cc.Button
-        },
+        btnCancel: cc.Button,
+        btnOK: cc.Button,
     },
 
     // use this for initialization
@@ -30,8 +19,5 @@ cc.Class({
 
     dismiss: function () {
         this.node.removeFromParent();
-    },
-
-    // update: function (dt) {
-    // },
+    }
 });

@@ -108,3 +108,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 game-server/logs/
+.idea
