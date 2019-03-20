@@ -1,51 +1,55 @@
-#   大圣棋牌（Pomelo + Cocos Creator）
-======
-网易pomelo框架 + CocosCreator客户端
-安卓+iOS+H5三端通用，同时支持分布式部署
-如果了解pomelo框架会发现本项目结构十分简单，希望大家能通过本项目更好的学习和使用pomelo
+# 百人牛牛项目
+*  此项目是棋牌，是pomelo + cocos creator学习最佳入门项目
 
->十分欢迎大家贡献代码，尤其是ccc客户端，因为一个人又要开发服务器又要开发客户端，还要去搞美术，实在有些忙不过来
+## 服务器环境搭建
 
-#   目前已有的功能和开发计划
-======
+### 1) 安装依赖
+*  node 版本:6.11.1
+*  sh 1-cnpm-install  (npm网速太慢安装不上，只好使用cnpm安装)
+
+### 2)导入数据库
+*  mysql版本: 5.6+
+*  进入mysql终端，登陆mysql，并且用source命令导入数据库
+   
 ```
-1、游客登录
-2、百人牛牛
-3、经典牛牛(支持房卡模式)开发中
-4、四川麻将 计划中
-```
-该项目的最终形态是包含许多种棋牌游戏基础玩法的、易重构易二次开发的游戏平台，任何人可以在这个基础上丰富自己特色功能
+   
+➜  ~ mysql -u root -p
+Enter password: jianan
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.7.20 MySQL Community Server (GPL)
 
-因为目前具有的功能较少，大家可以把它当做一个学习pomelo和cocos creator的入门项目对待
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
 
-#   环境搭建
-======
-服务器支持Mac/Linux/Win
-服务器搭建教程(以Mac)：
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> source /Users/jianan/Documents/study/NiuNiu-creator-pomelo/game-server/app/dao/mysql/chess.sql
+Query OK, 1 row affected (0.00 sec)
+
+Database changed
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
 ```
-1、安装pomelo <https://github.com/NetEase/pomelo/wiki/%E5%AE%89%E8%A3%85pomelo>
-2、clone本项目
-3、安装nodejs第三方库，执行chess/npm-install.sh
-4、安装mysql 5.6+  并设置好用户名和密码，这个mysql官网里面去找到合适的版本安装即可 <https://dev.mysql.com/downloads/>
-6、向mysql导入 chess/game-server/app/dao/mysql/chess.sql
-7、修改项目中对mysql的连接设置
-chess/game-server/config/mysql.json
-把该文件中的user  和  password 修改为上一步中mysql设置的用户名和密码
-7、运行服务器
-node 版本:6.11.1
+
+### 3)修改项目中对mysql的连接设置
+game-server/config/mysql.json
+把该文件中的`user`和`password`修改为上一步中mysql设置的用户名和密码
+
+### 4)运行服务器
+```
 cd chess/game-server
 pomelo start
-
+```
 到这里，如果不出意外，服务器就安装结束并且启动啦
 
-
-```
-客户端开发环境
-```
-CocosCreator 1.5+
-用ccc打开chess/client_cocos项目，直接运行即可
-```
-效果图:
+## 客户端开发环境
+*  CocosCreator版本: 1.9.3
+*  效果图:
 
 ![](./imgs/1.png)
 
