@@ -1,5 +1,4 @@
 require("../pomelo/pomelo-client");
-var GateConnector = require("../protocol/GateConnector");
 var BrnnProto = require("../protocol/BrnnProto");
 var MResponse = require("../protocol/MResponse");
 
@@ -7,48 +6,22 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        buttonExit: {
-            default: null,
-            type: cc.Button
-        },
+        buttonExit: cc.Button,
 
-        stateSprite: {
-            default: null,
-            type: cc.Sprite
-        },
+        stateSprite: cc.Sprite,
 
-        timeLabel: {
-            default: null,
-            type: cc.Label
-        },
+        timeLabel: cc.Label,
+        totalMoney: cc.Label,
+        chipLayout: cc.Layout,
 
-        totalMoney: {
-            default: null,
-            type: cc.Label
-        },
+        masterView: cc.Node,
+        chipBar: cc.Node,
 
-        chipLayout: {
-            default: null,
-            type: cc.Layout
-        },
-
-        masterView: {
-            default: null,
-            type: cc.Node
-        },
-
-        chipBar: {
-            default: null,
-            type: cc.Node,
-        },
-
-        brnnState: 2,   //state: 0,下注时间等待开始 | 1,游戏开始计算输赢 | 2,其他场景
+        brnnState: 2,           //state: 0,下注时间等待开始 | 1,游戏开始计算输赢 | 2,其他场景
         brnnChipSelect: 100,
-        brnnChipInDic: new Array(),     //{'1':0, '2':0, '3':0, '4':0};
 
-        chipViewSC: {
-            default: new Array()
-        },
+        brnnChipInDic: [],     //{'1':0, '2':0, '3':0, '4':0};
+        chipViewSC: [],
     },
 
     // use this for initialization
@@ -66,7 +39,6 @@ cc.Class({
         this.totalMoney.string = pomelo.userinfo.gold.toString();
     },
 
-    // 
     onEnable: function () {
         this.buttonExit.node.on('click', this.buttonExitTap, this);
         this.initBrnnEvent();
@@ -75,19 +47,16 @@ cc.Class({
         chipBarScript.startDefaultAction(this.brnnChipSelect);
     },
 
-    // 
     onDisable: function () {
         this.buttonExit.node.off('click', this.buttonExitTap, this);
         BrnnProto.disableEvent();
     },
 
-    // 
     buttonExitTap: function () {
         pomelo.disconnect();
         cc.director.loadScene('Login');  //离开后回到登录界面
     },
 
-    // 
     initBrnnEvent: function () {
         var self = this;
         BrnnProto.onAdd(function (data) {
@@ -139,7 +108,6 @@ cc.Class({
             self.scheduleOnce(function () {
                 this.resetChipView();
             }, 3);
-
         });
     },
 
@@ -151,7 +119,11 @@ cc.Class({
         this.brnnChipSelect = parseInt(chipin);
     },
 
-    //下注牌点击事件，真正完成下注
+    /**
+     * 下注牌点击事件，真正完成下注
+     * @param {*} event 
+     * @param {*} pkindex 
+     */
     buttonChipPokerTap: function (event, pkindex) {
         if (this.brnnState != 0) {
             console.log('下注时间已过');
@@ -193,7 +165,6 @@ cc.Class({
         });
     },
 
-    // 
     updateChipView: function (mychip) {
         for (var index = 1; index < 5; index++) {
             if (mychip[index] == null) {
@@ -206,7 +177,6 @@ cc.Class({
         }
     },
 
-    // 
     runChipItemMoveAnimation: function (aNode) {
         var cpscript = aNode.getComponent('ChipViewScript');
         var chipBarScript = this.chipBar.getComponent('ChipBarScript');
@@ -214,7 +184,6 @@ cc.Class({
         chipBarScript.runChipItemMoveAnimation(posWorld, cpscript.chipItemAnimationFinish, cpscript);
     },
 
-    // 
     resetChipView: function () {
         var masterViewSC = this.masterView.getComponent('ChipViewScript');
         masterViewSC.resetState();
@@ -226,7 +195,6 @@ cc.Class({
         }
     },
 
-    //
     pushPokerToChipView: function (pokerGroup) {
         if (pokerGroup.length !== 5) {
             console.log('pokerGroup长度不对');
@@ -252,8 +220,5 @@ cc.Class({
                 cpscript.showNiuNiu();
             }
         }, 2);
-    },
-
-    // update: function (dt) {
-    // },
+    }
 });

@@ -8,31 +8,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
         buttonBrnnRoom: cc.Button,
         roomCreated: null,
     },
 
     // use this for initialization
     onLoad: function () {
-        // this.buttonBrnnRoom.node.on('click', this.buttonBrnnRoomTap, this);
-
         var self = this;
-
-        //
         GateConnector.connectToConnector(function () {
             console.log('Connect to connector Success');
-
             this.node.runAction(cc.sequence(cc.delayTime(0.1), cc.callFunc(function () {
                 self.buttonBrnnRoomTap();
             })));
         });
     },
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 
     buttonBrnnRoomTap: function () {
         var param = {

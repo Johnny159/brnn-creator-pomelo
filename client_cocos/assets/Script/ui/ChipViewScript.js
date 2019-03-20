@@ -1,34 +1,10 @@
-
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //    default: null,      // The default value will be used only when the component attaching
-        //                           to a node for the first time
-        //    url: cc.Texture2D,  // optional, default is typeof default
-        //    serializable: true, // optional, default is true
-        //    visible: true,      // optional, default is true
-        //    displayName: 'Foo', // optional
-        //    readonly: false,    // optional, default is false
-        // },
-        // ...
-
-        labelTotal: {
-            default: null,
-            type: cc.Label
-        },
-
-        labelMine: {
-            default: null,
-            type: cc.Label
-        },
-
-        pokerPrefab: {
-            default: null,
-            type: cc.Prefab
-        },
+        labelTotal: cc.Label,
+        labelMine: cc.Label,
+        pokerPrefab: cc.Prefab,
 
         //扑克起始点的世界坐标系
         pokerPosFromWorld: {
@@ -36,7 +12,7 @@ cc.Class({
             visible: false
         },
 
-        myPokerList: null,    //发牌的数据
+        myPokerList: null,      //发牌的数据
         myResult: null,
         myPokerNodes: null,     //poker节点数组
         myChipItemNodes: null,  //筹码节点数组
@@ -81,11 +57,7 @@ cc.Class({
         if (this.myPokerList.length <= 0) {
             return;
         }
-
-        //
         this.myPokerNodes = new Array();
-
-        //
         for (var index = 0; index < this.myPokerList.length; index++) {
             var element = this.myPokerList[index];
             var pkitem = cc.instantiate(this.pokerPrefab);
@@ -102,18 +74,17 @@ cc.Class({
         }
     },
 
-    //移动-》翻转显示正面
-    pokerMoveOverCallback: function (pkitem) {
+    pokerMoveOverCallback: function (pkitem) {  // 移动->翻转显示正面
         var PokerItemSC = pkitem.getComponent('PokerItem');
         PokerItemSC.animationFlipTo(true, this.pokerFlipOverCallback, this);
     },
 
-    pokerFlipOverCallback: function (pkitem) {
-        //do nothing
-    },
+    pokerFlipOverCallback: function (pkitem) {},
 
-    //重置ChipView上的状态
-    //移除上面的扑克、赌注
+    /**
+     * 重置ChipView上的状态
+     * 移除上面的扑克、赌注
+     */
     resetState: function () {
         if (this.labelMine != null) {
             this.labelMine.string = '0';
@@ -137,12 +108,12 @@ cc.Class({
         this.myChipItemNodes = new Array();
     },
 
-    /*
-    nntype表示用户牌型
-    炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有牛(1) > 没牛(0)
-    niuN
-    牌面大小
-    */
+    /**
+     * nntype表示用户牌型
+     * 炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有牛(1) > 没牛(0)
+     * niuN
+     * 牌面大小
+     */
     showNiuNiu: function () {
         //牌型大小
         var muti = 1;
@@ -151,6 +122,7 @@ cc.Class({
             resName = 'png/nzd';
             muti = 8;
         }
+
         if (this.myResult.nntype == 5) {
             resName = 'png/nwx';
             muti = 6;
@@ -191,12 +163,13 @@ cc.Class({
             var scale = new cc.scaleTo(0.5, 0.5, 0.5);
             var sp = new cc.spawn(move, scale);
             ppNode.runAction(sp);
-
             self.myPokerNodes.push(ppNode);
         });
 
-        //输赢显示
-        //庄家没有单独的输赢标识，但是要显示倍数
+        /**
+         * 输赢显示
+         * 庄家没有单独的输赢标识，但是要显示倍数
+         */
         if (this.myResult.win == null || this.myResult.win == true) {
             cc.loader.loadRes('prefab/MutiLabel', cc.Prefab, function (error, prefab) {
                 var node = cc.instantiate(prefab);
@@ -225,7 +198,6 @@ cc.Class({
         }
     },
 
-    //
     positionOfCenterWorld: function () {
         var rrr = cc.random0To1();
         if (rrr < 0.7) {
@@ -244,7 +216,6 @@ cc.Class({
         }
     },
 
-    //
     chipItemAnimationFinish: function (chipItem) {
         var posWorld = chipItem.parent.convertToWorldSpaceAR(chipItem.getPosition());
         var posNode = this.node.convertToNodeSpaceAR(posWorld);

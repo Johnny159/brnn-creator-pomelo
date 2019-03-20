@@ -1,17 +1,9 @@
-/**
- * 
- */
 cc.Class({
     extends: cc.Component,
 
     properties: {
-
         chipItemList: null,    //下注的item列表
-
-        selectChipItem: {
-            default: null,
-            type: cc.Node,
-        },
+        selectChipItem: cc.Node
     },
 
     // use this for initialization
@@ -54,7 +46,6 @@ cc.Class({
         this.runSelectActionOnNode(tmpNode);
     },
 
-    //
     stopAllChipAction: function () {
         for (var index = 0; index < this.chipItemList.length; index++) {
             var chd = this.chipItemList[index];
@@ -63,14 +54,12 @@ cc.Class({
         }
     },
 
-    //
     onChipClick: function (event) {
         this.stopAllChipAction();
         var anode = event.target;
         this.runSelectActionOnNode(anode);
     },
 
-    //
     runSelectActionOnNode: function (aNode) {
         var j1 = cc.jumpBy(0.2, cc.p(0, 0), 20, 1);
         var j2 = cc.jumpBy(0.15, cc.p(0, 0), 10, 1);
@@ -82,7 +71,6 @@ cc.Class({
         this.selectChipItem = aNode;
     },
 
-    //
     runChipItemMoveAnimation: function (posToWorld, finishiCallback, target) {
         var posNode = this.node.convertToNodeSpaceAR(posToWorld);
         var self = this;
@@ -94,8 +82,5 @@ cc.Class({
             var callback = cc.callFunc(finishiCallback, target, chipitem);
             chipitem.runAction(cc.sequence(actionMove, callback));
         });
-    },
-
-    // update: function (dt) {
-    // },
+    }
 });
