@@ -1,11 +1,13 @@
-棋牌服务器API
+# 棋牌服务器API
 接口方式说明：
 request：客户端发起调用并接收返回
 push:服务器主动向客户端推数据
 notify:客户端主动向服务器发数据，无返回
+
 # 1、登录认证模块
 连接39.108.83.192:3101后调用以下接口
-##1.1游客登录
+## 1.1游客登录
+```
 接口：
 request:gate.gateHandler.guestLogin
 参数：
@@ -45,23 +47,30 @@ userinfo：游客用户信息
 token：用户凭证，后续接口调用需要
 localConnector是本地测试connector地址
 remoteConnector是远程测试服务器的connector地址
+```
 
-
-##1.2刷新token
+## 1.2刷新token
+```
 request:gate.gateHandler.refreshToken
 参数：
 token，登录成功后返回的token
 返回：
 同**游客登录**返回
+```
 
-#2、房间模块
-##2.1获取房间列表
+# 2、房间模块
+
+## 2.1获取房间列表
+```
 request:connector.entryHandler.fetchRoomInfo
 参数：
 rtype，房间类型：jdnn（经典牛牛），zjh（扎金花），bjl（百家乐）
 返回：
 房间列表数据
-##2.2进入房间
+```
+
+## 2.2进入房间
+```
 request:connector.entryHandler.joinRoom
 参数：
 userid : 用户id，登录成功后返回,
@@ -81,7 +90,10 @@ token : ---
 }
 注释：
 userList，包括自己在内的房间内userid数组
-##2.3根据userid获取用户信息
+```
+
+## 2.3根据userid获取用户信息
+```
 request:connector.entryHandler.fetchUserInfo
 参数
 userList，userid数组，为json数组格式，
@@ -92,9 +104,13 @@ userList: [
     ]
 返回：
 用户信息数组
-#3、牛牛游戏模块
-进入房间后调用
-##3.1准备/取消准备
+```
+
+# 3、牛牛游戏模块
+*  进入房间后调用
+
+## 3.1准备/取消准备
+```
 request:jdnn.jdnnHandler.ready
 参数：
 roomid
@@ -102,7 +118,10 @@ userid
 ready，准备true，取消准备false
 返回：
 房间内所有用户准备状态
-##3.2选择分数倍数
+```
+
+## 3.2选择分数倍数
+```
 request:jdnn.jdnnHandler.chipIn
 参数：
 userid
@@ -110,11 +129,17 @@ roomid
 muti，倍数，大于0的整数
 返回：
 选择倍数成功
-##3.3有用户准备/取消准备
+```
+
+## 3.3有用户准备/取消准备
+```
 push:jdnn.ready
 返回：
 房间内所有用户准备状态
-##3.4准备时间倒计时
+```
+
+## 3.4准备时间倒计时
+```
 push:jdnn.gamePrepare
 返回：
 state：
@@ -124,20 +149,27 @@ state：
 //3、发牌开始
 //4、开牌 + 结算
 //5、空闲时间
-
 time：倒计时间，单位：秒
+```
 
-##3.5产生庄家
+## 3.5产生庄家
+```
 push:jdnn.markBanker
 返回：
 state
 banker：庄家的userid
-##3.6选择分数倍数的倒计时
+```
+
+## 3.6选择分数倍数的倒计时
+```
 push:jdnn.gameChip
 返回：
 state:
 time:
-##3.7发牌
+```
+
+## 3.7发牌
+```
 push:jdnn.gamePoker
 返回：
 {
@@ -198,7 +230,10 @@ push:jdnn.gamePoker
 poker：每个userid对应该用户发到手的牌五张
 color：D:方块,C:梅花,B:红桃,A:黑桃,
 value：1->A,  13->K
-##3.8结算输赢
+```
+
+## 3.8结算输赢
+```
 push:jdnn.gameResult
 返回：
 {
@@ -235,5 +270,6 @@ nntype：表示用户牌型
 五花： 5倍
 五小： 6倍
 炸弹： 8倍
+```
 
 

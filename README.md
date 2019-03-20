@@ -1,5 +1,6 @@
 # 百人牛牛项目
 *  此项目是棋牌，是pomelo + cocos creator学习最佳入门项目
+*  服务器api接口文档参考: doc/棋牌服务器API.md
 
 ## 服务器环境搭建
 
