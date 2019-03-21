@@ -12,15 +12,16 @@ cc.Class({
 
         timeLabel: cc.Label,
         totalMoney: cc.Label,
+
         chipLayout: cc.Layout,
 
         masterView: cc.Node,
         chipBar: cc.Node,
 
-        brnnState: 2,           //state: 0,下注时间等待开始 | 1,游戏开始计算输赢 | 2,其他场景
+        brnnState: 2,           // state--> 0: 下注时间等待开始 1: 游戏开始计算输赢 2:其他场景
         brnnChipSelect: 100,
 
-        brnnChipInDic: [],     //{'1':0, '2':0, '3':0, '4':0};
+        brnnChipInDic: [],      // {'1':0, '2':0, '3':0, '4':0};
         chipViewSC: [],
     },
 

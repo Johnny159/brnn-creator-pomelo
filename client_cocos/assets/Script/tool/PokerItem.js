@@ -1,6 +1,3 @@
-/**
- * 
- */
 cc.Class({
     extends: cc.Component,
 
@@ -10,9 +7,7 @@ cc.Class({
     },
 
     // use this for initialization
-    onLoad: function () {
-
-    },
+    onLoad: function () {},
 
     bindPokerModel: function (pkmodel) {
         this.pokerModel = pkmodel;
@@ -21,8 +16,6 @@ cc.Class({
     animationMoveTo: function (delay, pos, finishCallback, target) {
         var dl = cc.delayTime(delay);
         var bpos = new cc.Vec2(pos.x, this.node.getPositionY());
-        // var mt1 = cc.moveTo(0.15, bpos);
-        // var mt2 = cc.moveTo(0.15, pos);
 
         //改为贝塞尔移动
         var ar = [this.node.getPosition(), bpos, pos];
@@ -42,8 +35,7 @@ cc.Class({
         var seq = cc.sequence(flip0, cal, flip1, calFinish);
         this.node.runAction(seq);
     },
-
-    //
+    
     switchSprite: function () {
         var resname = null;
         if (this.frontState) {

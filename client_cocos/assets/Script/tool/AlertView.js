@@ -1,23 +1,20 @@
-/**
- * 
- */
 cc.Class({
     extends: cc.Component,
 
     properties: {
         labelMsg: cc.Label,
-
-        btnCancel: cc.Button,
-        btnOK: cc.Button,
     },
 
     // use this for initialization
-    onLoad: function () {
-        this.btnCancel.node.on('click', this.dismiss, this);
-        this.btnOK.node.on('click', this.dismiss, this);
-    },
+    onLoad: function () { },
 
-    dismiss: function () {
-        this.node.removeFromParent();
-    }
+    onClick: function(event, customEventData){
+        if(customEventData == "btn_ok"){
+            this.node.removeFromParent();
+        }
+
+        if(customEventData == "btn_cancel"){
+            this.node.removeFromParent();
+        }
+    },
 });
