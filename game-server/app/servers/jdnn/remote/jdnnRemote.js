@@ -11,9 +11,15 @@ var JdnnRemote = function (app) {
     this.channelService = app.get('channelService');
 };
 
-//userid
-//roomid 同时作为channelName
-//sid 客户端连接的connector服务器id
+/**
+ * userid
+ * roomid 同时作为channelName
+ * sid 客户端连接的connector服务器id
+ * @param userid
+ * @param roomid
+ * @param serverid
+ * @param callback
+ */
 JdnnRemote.prototype.joinRoom = function (userid, roomid, serverid, callback) {
     var channel = this.channelService.getChannel(roomid, false);
     if (channel) {
@@ -52,7 +58,6 @@ JdnnRemote.prototype.createRoom = function (userid, roomdata, callback) {
     }
     callback();
 };
-
 
 JdnnRemote.prototype.exit = function (userid, serverid, name, callback) {
     var channel = this.channelService.getChannel(name);

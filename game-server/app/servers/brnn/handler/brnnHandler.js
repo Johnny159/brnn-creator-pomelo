@@ -11,8 +11,8 @@ var Handler = function(app) {
 };
 
 /*
-下注
-一个玩家可以对多付牌下注
+ * 下注
+ * 一个玩家可以对多付牌下注
  */
 Handler.prototype.chipIn = function(msg, session, next) {
     var userid = msg.userid;

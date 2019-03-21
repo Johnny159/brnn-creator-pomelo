@@ -33,9 +33,8 @@ handler.enterRoom = function (msg, session, next) {
 	}
 
 	if (msg.rtype == 'brnn') {
-		var rid = msg.rtype;		//brnn不需要rid，用rtype作为rid
-		//duplicate log in
-		if (!sessionService.getByUid(token.userid)) {
+		var rid = msg.rtype;		                  // brnn不需要rid，用rtype作为rid
+		if (!sessionService.getByUid(token.userid)) { // duplicate log in
 			session.bind(token.userid);
 			session.set('rid', rid);
 			session.push('rid', function (err) {
@@ -45,8 +44,8 @@ handler.enterRoom = function (msg, session, next) {
 			});
 			session.on('closed', brnnOnUserLeave.bind(null, this.app));
 		}
-		//put user into channel
-		this.app.rpc.brnn.brnnRemote.add(session, token.userid, this.app.get('serverId'), msg.rtype, true, function (users) {
+
+		this.app.rpc.brnn.brnnRemote.add(session, token.userid, this.app.get('serverId'), msg.rtype, true, function (users) { //put user into channel
 			next(null, {
 				users: users
 			});
@@ -68,21 +67,16 @@ var brnnOnUserLeave = function (app, session) {
 	app.rpc.brnn.brnnRemote.exit(session, session.uid, app.get('serverId'), session.get('rid'), null);
 };
 
-
 handler.exit = function (msg, session, next) {
 	this.app.rpc.brnn.brnnRemote.exit(session, session.uid, this.app.get('serverId'), session.get('rid'), function (res) {
 		next(null, res);
 	});
 };
 
-
-/**
- * for 多个游戏选择
- */
-
 /*
-获取不同游戏的房间list信息
-msg.rtype	房间类型：jdnn（经典牛牛），zjh（扎金花），bjl（百家乐）
+ * for 多个游戏选择
+ * 获取不同游戏的房间list信息
+ * msg.rtype	房间类型：jdnn（经典牛牛），zjh（扎金花），bjl（百家乐）
  */
 handler.fetchRoomInfo = function (msg, session, next) {
 	var sqlHelper = this.app.get('sqlHelper');
@@ -97,9 +91,14 @@ handler.fetchRoomInfo = function (msg, session, next) {
 	});
 };
 
-//根据rtype创建不同类型的房间，
-//rtype:游戏类型
-//user:查找这个userid创建的房间
+/**
+ * 根据rtype创建不同类型的房间
+ * rtype:游戏类型
+ * user:查找这个userid创建的房间
+ * @param msg
+ * @param session
+ * @param next
+ */
 handler.createRoom = function (msg, session, next) {
 	var tokenStr = msg.token;
 	var token = new UToken();
@@ -151,9 +150,14 @@ handler.createRoom = function (msg, session, next) {
 	);
 };
 
-//userid 用户id
-//roomid 房间id
-//rtype	 房间type,brnn、jdnn、zjh、bjl
+/**
+ * userid 用户id
+ * roomid 房间id
+ * rtype	 房间type,brnn、jdnn、zjh、bjl
+ * @param msg
+ * @param session
+ * @param next
+ */
 handler.joinRoom = function (msg, session, next) {
 	var tokenStr = msg.token;
 	var token = new UToken();
@@ -191,9 +195,11 @@ handler.joinRoom = function (msg, session, next) {
 };
 
 handler.exitGame = function (app, session) {
-	//判断session是否有绑定的roomid
-	//如果没有则直接断开连接
-	//如果有则要退出房间并调用不同的remote的exit方法
+	/**
+	 * 判断session是否有绑定的roomid
+	 * 如果没有则直接断开连接
+	 * 如果有则要退出房间并调用不同的remote的exit方法
+	 */
 	if (!session || !session.uid) {
 		return;
 	}

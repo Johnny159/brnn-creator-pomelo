@@ -33,8 +33,7 @@ handler.send = function(msg, session, next) {
 	if(msg.target == '*') {
 		channel.pushMessage('onChat', param);
 	}
-	//the target is specific user
-	else {
+	else { //the target is specific user
 		var tuid = msg.target + '*' + rid;
 		var tsid = channel.getMember(tuid)['sid'];
 		channelService.pushMessageByUids('onChat', param, [{

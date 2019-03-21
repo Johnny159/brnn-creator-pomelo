@@ -82,7 +82,6 @@ BrnnRemote.prototype.kick = function (userid, sid, name) {
 	channel.pushMessage(param);
 };
 
-
 BrnnRemote.prototype.exit = function (userid, sid, roomid, callback) {
 	var channelService = this.app.get('channelService');
 	var channel = channelService.getChannel(roomid, false);
