@@ -2,10 +2,14 @@ var RoomManager = function() {};
 
 module.exports = RoomManager;
 
-
-//state 房间状态，0：准备状态，1：正在游戏
-//rtype 房间游戏类型--(jdnn,zjh,bjl)
-//获取限制个数的游戏房间信息
+/**
+ * state 房间状态，0：准备状态，1：正在游戏
+ * rtype 房间游戏类型--(jdnn,zjh,bjl)
+ * 获取限制个数的游戏房间信息
+ * @param sqlHelper
+ * @param rtype
+ * @param callback
+ */
 RoomManager.fetchRoomInfo = function (sqlHelper, rtype, callback) {
     var sqlstring = "select * from t_room where rtype = '" + rtype + "' limit 6;";
     sqlHelper.query(sqlstring, null,
@@ -62,9 +66,13 @@ RoomManager.createRoom = function (sqlHelper, rtype, userid, callback) {
     );
 };
 
-
-//获取多个用户信息
-//uidArr    用户id数组
+/**
+ * 获取多个用户信息
+ * uidArr  用户id数组
+ * @param sqlHelper
+ * @param uidArr
+ * @param callback
+ */
 RoomManager.fetchUserInfo = function (sqlHelper, uidArr, callback) {
     var uidstring = uidArr.join(",");
     var sqlstring = 'select * from t_user where userid in (' + uidstring + ')';

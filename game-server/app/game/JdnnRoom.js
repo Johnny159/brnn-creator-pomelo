@@ -1,8 +1,14 @@
 var GMResponse = require('./GMResponse.js');
 var PokerManager = require('./PokerManager.js');
-var RoomManager = require('./RoomManager.js');
-//经典牛牛
-//绑定的room
+
+/**
+ * 经典牛牛
+ * 绑定的room
+ * @param channel
+ * @param sqlHelper
+ * @param roomdata
+ * @constructor
+ */
 var JdnnRoom = function (channel, sqlHelper, roomdata) {
   this.roomdata = roomdata;
   if (!this.roomdata.users) {
@@ -14,22 +20,24 @@ var JdnnRoom = function (channel, sqlHelper, roomdata) {
 
   this.readyList = {};
 
-  //state
-  //0、准备
-  //1、产生庄家
-  //2、非庄家选择分数倍数
-  //3、发牌开始
-  //4、开牌 + 结算
-  //5、空闲时间
-  //->0
+  /**
+   * state
+   * 0、准备
+   * 1、产生庄家
+   * 2、非庄家选择分数倍数
+   * 3、发牌开始
+   * 4、开牌 + 结算
+   * 5、空闲时间
+   * ->0
+   */
   this.state = 0;
 
   this.baseGold = 1;  //底钱
 
-  /*
-  this.joinUser('10000019');
-  this.userReady('10000019', true);
-  */
+  /**
+   * this.joinUser('10000019');
+   * this.userReady('10000019', true);
+   */
 };
 
 module.exports = JdnnRoom;
@@ -46,6 +54,7 @@ JdnnRoom.prototype.joinUser = function (userid) {
   }
   this.roomdata.usercount++;
   this.readyList[userid] = 0; //不用bool而用int
+
   //sql update
   this.updateUserInSQL();
   return true;
@@ -56,7 +65,9 @@ JdnnRoom.prototype.joinUser = function (userid) {
 JdnnRoom.prototype.hasUser = function (userid) {
   if (this.roomdata.users.indexOf(userid) < 0) {
     return false;
-  } else return true;
+  } else {
+    return true;
+  }
 };
 
 
@@ -68,6 +79,7 @@ JdnnRoom.prototype.userReady = function (userid, ready) {
     this.readyList[userid] = ready;
     this.channel.pushMessage('jdnn.ready', this.readyList);
   }
+
   //检查房间所有玩家装备状态，并决定是否开始游戏
   if (this.checkAllReady() && this.roomdata.usercount > 1) {
     this.startGame();
@@ -94,6 +106,7 @@ JdnnRoom.prototype.checkAllReady = function () {
 
 //玩家离开
 JdnnRoom.prototype.exitUser = function (userid, serverid) {
+
   //把字符串变为
   delete this.readyList[userid];
   var uarr = this.roomdata.users.split(',');
@@ -148,14 +161,16 @@ JdnnRoom.prototype.reset = function () {
   this.state = 0;
 };
 
-//state
-//0、准备
-//1、产生庄家
-//2、非庄家选择分数倍数
-//3、发牌开始
-//4、开牌 + 结算
-//5、空闲时间
-//->0
+/**
+ * state
+ * 0、准备
+ * 1、产生庄家
+ * 2、非庄家选择分数倍数
+ * 3、发牌开始
+ * 4、开牌 + 结算
+ * 5、空闲时间
+ * ->0
+ */
 JdnnRoom.prototype.startGame = function () {
   this.reset();
   this.gamePrepare();
@@ -244,6 +259,7 @@ JdnnRoom.prototype.gamePoker = function () {
 
 //结算
 JdnnRoom.prototype.gameResult = function (pkgroup) {
+
   //1、计算所有牌大小
   var resultGroup = {};
   var bankerRst = null;
@@ -284,6 +300,7 @@ JdnnRoom.prototype.gameResult = function (pkgroup) {
       }
     }
   }
+
   bankerRst.goldWin = bankerGoldWin;
 
   this.channel.pushMessage('jdnn.gameResult', resultGroup);

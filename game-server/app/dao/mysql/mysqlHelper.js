@@ -84,6 +84,7 @@ mysqlHelper.prototype.updateUsersGold = function(ugoldResults, callback){
                 }
             }
         });
+
         connection.commit(function(err) {
             if (err) {
                 connection.rollback();

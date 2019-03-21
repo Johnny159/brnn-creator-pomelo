@@ -1,17 +1,20 @@
 var PokerManager = require('./PokerManager.js');
 var GMResponse = require('./GMResponse.js');
-//百人牛牛
-//绑定的room
+
+/**
+ * 百人牛牛 绑定的room
+ * @param channel
+ * @param sqlHelper
+ * @constructor
+ */
 var DouniuRoom = function(channel, sqlHelper) {
   this.channel = channel;
   this.sqlHelper = sqlHelper;
   this.userList = [];     //所有在房间中的玩家的userid
   this.chipList = {};
-
-  this.maxWillWait = 10; //sec
+  this.maxWillWait = 10;  //sec
   this.willWait = 0;
-
-  this.state = 0;   //state: 0,下注时间等待开始 | 1,游戏开始计算输赢 | 2,其他场景
+  this.state = 0;         //state: 0,下注时间等待开始 | 1,游戏开始计算输赢 | 2,其他场景
 };
 
 module.exports = DouniuRoom;
@@ -31,9 +34,11 @@ DouniuRoom.prototype.kickUser = function(userid) {
   }
 };
 
-//开始游戏，倒计时等待下注
-//发5副牌，其中一个庄家
-//房间所有玩家向非庄家下注
+/**
+ * 开始游戏，倒计时等待下注
+ * 发5副牌，其中一个庄家
+ * 房间所有玩家向非庄家下注
+ */
 DouniuRoom.prototype.startGame = function() {
   this.state = 0;
   this.willWait = this.maxWillWait;
@@ -116,9 +121,15 @@ DouniuRoom.prototype.dealPokers = function() {
   }.bind(this), 1000 * 10);
 };
 
-//return 下注成功返回该用户目前的下注情况，否则null（可能余额不够、或者非下注时间）
-//pkindex > 0
-//balance : 余额
+/**
+ * pkindex > 0
+ * balance : 余额
+ * @param userid
+ * @param gold
+ * @param pkindex
+ * @param balance
+ * @returns {*} 下注成功返回该用户目前的下注情况，否则null（可能余额不够、或者非下注时间）
+ */
 DouniuRoom.prototype.chipIn = function(userid, gold, pkindex, balance) {
   if (pkindex <= 0 ||  this.state != 0) {
     return null;
@@ -134,7 +145,6 @@ DouniuRoom.prototype.chipIn = function(userid, gold, pkindex, balance) {
   this.chipList[userid][pkindex] = parseInt(gold);
   return this.chipList[userid];
 };
-
 
 DouniuRoom.prototype.getGoldChipedForUser = function(userid) {
   var chipinfo = this.chipList[userid];
@@ -171,6 +181,7 @@ DouniuRoom.prototype.pushGoldResult = function (pokerRes) {
       for (var pkindex in chipinfo) {
         if (chipinfo.hasOwnProperty(pkindex)) {
           var goldChiped = chipinfo[pkindex];
+
           //计算所有下注的牌输赢
           dbcount = compareResult[pkindex];
           goldResult += (dbcount * goldChiped);
@@ -188,10 +199,12 @@ DouniuRoom.prototype.pushGoldResult = function (pokerRes) {
     setTimeout(this.startGame.bind(this), 3000);
     return ;
   }
+
   //根据userid排序,方便查询这些用户的总金币并显示
   userGoldResult.sort(function(a, b){
     return a.userid > b.userid;
   });
+
   this.sqlHelper.updateUsersGold(userGoldResult, function(err, allGoldResult) {
     if (err) {
       var res = new GMResponse(-1001, '无法正确结算', err);
@@ -212,13 +225,21 @@ DouniuRoom.prototype.destroy = function () {
 };
 
 
-//计算牌面大小
+/**
+ * 计算牌面大小
+ * @param pokers
+ */
 var calculateResult = function(pokers) {
-  //1 遍历所有元素，设置nnValue(大于10都设置为10)
-  //顺便统计五花、四花(>10)、五小(<10)、炸弹条件满足情况
+  /**
+   * 1 遍历所有元素，设置nnValue(大于10都设置为10)
+   * 顺便统计五花、四花(>10)、五小(<10)、炸弹条件满足情况
+   */
   var total = 0;
-  //nntype表示用户牌型
-  //炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有分(1) > 没分(0)
+
+  /**
+   * nntype表示用户牌型
+   * 炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有分(1) > 没分(0)
+   */
   var nntype = 0;
   var wuxiaoCount = 0;  //小于5的牌张数
   var zhadanDic = {};
@@ -228,7 +249,6 @@ var calculateResult = function(pokers) {
     var pk = pokers[index];
     pk.nnValue = pk.value > 10 ? 10 : pk.value;
     total += pk.nnValue;
-
     zhadanDic[pk.value] = ((zhadanDic[pk.value] == undefined) ? 1 : zhadanDic[pk.value] + 1);
 
     if (pk.value == 10) {
@@ -241,7 +261,8 @@ var calculateResult = function(pokers) {
   }
 
   var res = {};
-  //2 优先判断炸弹
+
+  // 2 优先判断炸弹
   for (var key in zhadanDic) {
     if (zhadanDic.hasOwnProperty(key)) {
       var element = zhadanDic[key];
@@ -324,9 +345,15 @@ var calculateResult = function(pokers) {
 }
 
 
-//pk1 > pk2 -> 1;
-//pk1 = pk2 -> 0;
-//pk1 < pk2 -> -1;
+/**
+ * 比较2副手牌大小
+ * pk1 > pk2 -> 1;
+ * pk1 = pk2 -> 0;
+ * pk1 < pk2 -> -1;
+ * @param pk1
+ * @param pk2
+ * @returns {number}
+ */
 var comparePoker = function(pk1, pk2) {
   if (pk1.nntype > pk2.nntype) {
     return 1;
@@ -344,18 +371,20 @@ var comparePoker = function(pk1, pk2) {
 }
 
 
-/*
-nntype表示用户牌型
-炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有分(1) > 没分(0)
-牌型翻倍情况：
-无分和牛1，牛2，牛3，牛4，牛5，牛6： 1倍
-牛7，牛8，牛9： 2倍
-牛牛： 3倍
-四花： 4倍
-五花： 5倍
-五小： 6倍
-炸弹： 8倍
-*/
+/**
+ * nntype表示用户牌型
+ * 炸弹(6) > 五小(5) > 五花(4) > 四花(3) > 牛牛(2) > 有分(1) > 没分(0)
+ * 牌型翻倍情况：
+ * 无分和牛1，牛2，牛3，牛4，牛5，牛6： 1倍
+ * 牛7，牛8，牛9： 2倍
+ * 牛牛： 3倍
+ * 四花： 4倍
+ * 五花： 5倍
+ * 五小： 6倍
+ * 炸弹： 8倍
+ * @param poker
+ * @returns {number}
+ */
 var doubleCountForPoker = function(poker) {
   switch (poker.nntype) {
     case 6:
@@ -372,7 +401,9 @@ var doubleCountForPoker = function(poker) {
       {
         if (poker.niuN > 6) {
           return 2;
-        } else return 1;
+        }else {
+          return 1;
+        }
       }
     case 0:
       return 1;
