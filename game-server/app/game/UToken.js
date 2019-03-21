@@ -1,4 +1,3 @@
-
 var secret_key = 'InmbuvP6Z8';
 
 var UToken = function(userid){
@@ -20,8 +19,11 @@ UToken.prototype.isValid = function(){
     return false;
 };
 
-//判断是否过期
-//已过期返回yes
+/**
+ * 判断是否过期
+ * 已过期返回yes
+ * @returns {boolean}
+ */
 UToken.prototype.isOutOfDate = function(){
     var now = new Date().getTime();
     return (now > this.exp);
@@ -35,7 +37,6 @@ UToken.prototype.encrypt = function(){
     crypted += cipher.final('hex');
     return crypted;
 };
-
 
 UToken.prototype.decrypt = function(tokenString){
     if (tokenString) {

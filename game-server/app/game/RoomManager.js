@@ -19,7 +19,6 @@ RoomManager.fetchRoomInfo = function (sqlHelper, rtype, callback) {
     );
 };
 
-
 RoomManager.fetchRoomCreatedByUser = function (sqlHelper, userid, callback) {
     var sqlstring = "select * from t_room where creator = '" + userid + "';";
     sqlHelper.query(sqlstring, null,
@@ -49,7 +48,6 @@ RoomManager.fetchRoomJoinedByUser = function (sqlHelper, userid, callback) {
         }
     );
 };
-
 
 RoomManager.createRoom = function (sqlHelper, rtype, userid, callback) {
     var time = new Date().getTime();
