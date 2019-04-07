@@ -11,15 +11,6 @@ var BrnnRemote = function (app) {
 	this.channelService = app.get('channelService');
 };
 
-/**
- * Add user into brnn channel.
- *
- * @param {String} userid unique id for user
- * @param {String} sid server id
- * @param {String} name channel name
- * @param {boolean} flag channel parameter
- *
- */
 BrnnRemote.prototype.add = function (userid, sid, name, flag, callback) {
 	var channel = this.channelService.getChannel(name, flag);
 	var param = {
@@ -27,9 +18,8 @@ BrnnRemote.prototype.add = function (userid, sid, name, flag, callback) {
 		userid: userid
 	};
 	channel.pushMessage(param);
-
 	if (!!channel) {
-		if (!channel.gameRoom) {
+		if (!channel.gameRoom) {  // 通过在channel对象上挂载一个gameRoom对象来搞定
 			var sqlHelper = this.app.get('sqlHelper');
 			var room = new DouniuRoom(channel, sqlHelper);
 			channel.gameRoom = room;
@@ -42,15 +32,6 @@ BrnnRemote.prototype.add = function (userid, sid, name, flag, callback) {
 	callback(new GMResponse(1, '加入房间成功', users));
 };
 
-/**
- * Get user from Brnn channel.
- *
- * @param {Object} opts parameters for request
- * @param {String} name channel name
- * @param {boolean} flag channel parameter
- * @return {Array} users userids in channel
- *
- */
 BrnnRemote.prototype.get = function (name, flag) {
 	var users = [];
 	var channel = this.channelService.getChannel(name, flag);
@@ -60,17 +41,8 @@ BrnnRemote.prototype.get = function (name, flag) {
 	return users;
 };
 
-/**
- * Kick user out brnn channel.
- *
- * @param {String} userids unique id for user
- * @param {String} sid server id
- * @param {String} name channel name
- *
- */
 BrnnRemote.prototype.kick = function (userid, sid, name) {
 	var channel = this.channelService.getChannel(name, false);
-	// leave channel
 	if (!!channel) {
 		channel.leave(userid, sid);
 		channel.gameRoom.kickUser(userid);

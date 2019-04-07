@@ -10,11 +10,7 @@ var Handler = function(app) {
     this.channelService = app.get('channelService');
 };
 
-/*
- * 下注
- * 一个玩家可以对多付牌下注
- */
-Handler.prototype.chipIn = function(msg, session, next) {
+Handler.prototype.chipIn = function(msg, session, next) { // 下注 一个玩家可以对多付牌下注
     var userid = msg.userid;
     var gold = msg.gold;
     var pkindex = msg.pkindex;
