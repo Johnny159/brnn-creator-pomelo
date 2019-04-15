@@ -1,3 +1,9 @@
+/**
+ * 核心笔记：
+ * 		玩家创建或者加入房间，由于玩家首先得调用前端服务器发起请求， 然后前端服务器发起rpc调用
+ * 		创建服务器之类的，则是：把数据存到其它服务器上
+ *
+ */
 
 var UToken = require('../../../game/UToken.js');
 var GMResponse = require('../../../game/GMResponse.js');
@@ -13,14 +19,15 @@ var Handler = function (app) {
 
 var handler = Handler.prototype;
 
-/*
-msg.rid		房间id(百人类型的大房间可以不需要rid，因为只有一个这样的房间)
-msg.rtype	房间类型：brnn（百人牛牛）
-msg.token	必须有效的token才能建立session
+/**
+ msg.rid		房间id(百人类型的大房间可以不需要rid，因为只有一个这样的房间)
+ msg.rtype	房间类型：brnn（百人牛牛）
+ msg.token	必须有效的token才能建立session
+
  */
 handler.enterRoom = function (msg, session, next) {
 	var tokenStr = msg.token;
-	var token = new UToken();
+	var token = new UToken(); // 根据时间戳生成token
 	token.decrypt(tokenStr);
 	var sessionService = this.app.get('sessionService');
 	if (token.isValid() == false) {

@@ -11,7 +11,6 @@ UToken.prototype.refresh = function(){
     this.exp = new Date().getTime() + 1000 * 60 * 60;
 };
 
-//判断是否合法
 UToken.prototype.isValid = function(){
     if (this.userid && this.exp) {
         return true;
@@ -19,11 +18,6 @@ UToken.prototype.isValid = function(){
     return false;
 };
 
-/**
- * 判断是否过期
- * 已过期返回yes
- * @returns {boolean}
- */
 UToken.prototype.isOutOfDate = function(){
     var now = new Date().getTime();
     return (now > this.exp);
@@ -51,4 +45,4 @@ UToken.prototype.decrypt = function(tokenString){
         this.userid = null;
         this.exp = null;
     }
-}
+};

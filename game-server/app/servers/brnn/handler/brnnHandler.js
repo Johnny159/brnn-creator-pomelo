@@ -10,7 +10,7 @@ var Handler = function(app) {
     this.channelService = app.get('channelService');
 };
 
-Handler.prototype.chipIn = function(msg, session, next) { // 下注 一个玩家可以对多付牌下注
+Handler.prototype.chipIn = function(msg, session, next) { // 前端调用，开始下注 一个玩家可以对多付牌下注
     var userid = msg.userid;
     var gold = msg.gold;
     var pkindex = msg.pkindex;
@@ -21,7 +21,7 @@ Handler.prototype.chipIn = function(msg, session, next) { // 下注 一个玩家
     }
     var room = channel.gameRoom;
     var sqlHelper = this.app.get('sqlHelper');
-    sqlHelper.queryUserInfo(userid, function(err, userinfo) {
+    sqlHelper.queryUserInfo(userid, function(err, userinfo) { // 查询这个userId对应的玩家的金币，从而判断是否能下注成功
         var cpr = room.chipIn(userid, gold, pkindex, userinfo.gold);
         if (cpr != null) {
             var response = new GMResponse(1, 'ok', cpr);

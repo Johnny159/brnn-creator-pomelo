@@ -18,7 +18,7 @@ app.configure('production|development', 'gate', function () {
 
 app.loadConfig("mysql", app.getBase() + "/config/mysql.json"); // 初始化mysql配置
 
-app.configure('production|development', function () {    // mysql 应该是对所有服务器都要生效
+app.configure('production|development', function () { // 所有服务器都是mysql服务器的一个客户端
 	var Helper = require("./app/dao/mysql/mysqlHelper");
 	var sqlHelper = new Helper(app);
 	app.set("sqlHelper", sqlHelper);

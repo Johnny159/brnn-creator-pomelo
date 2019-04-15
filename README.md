@@ -55,3 +55,5 @@ pomelo start
 
 ![](./imgs/1.png)
 
+### 5)最核心的地方就在于 channel和gameRoom的绑定，这样保证一个房间独立出来
+
