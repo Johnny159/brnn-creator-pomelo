@@ -8,7 +8,7 @@ var GMResponse = require('./GMResponse.js');
  * @constructor
  */
 var DouniuRoom = function(channel, sqlHelper) {
-  this.channel = channel;
+  this.channel = channel; // 绑定的channel
   this.sqlHelper = sqlHelper;
   this.userList = [];     //所有在房间中的玩家的userid
   this.chipList = {};
