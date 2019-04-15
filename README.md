@@ -59,4 +59,5 @@ pomelo start
 
 *  1.就在于 channel和gameRoom的绑定，这样保证一个房间独立出来
 *  2.DouniuRoom调用startGame，驱动游戏的开始
+*  3.mysql数据库虽然有多份实例，所有的数据库其实就是mysql数据库的一个客户端
 
