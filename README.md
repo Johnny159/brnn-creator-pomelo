@@ -55,9 +55,10 @@ pomelo start
 
 ![](./imgs/1.png)
 
-### 5)最核心的地方
+### 5)必须理解的最核心的地方
 
-*  1.就在于 channel和gameRoom的绑定，这样保证一个房间独立出来
-*  2.DouniuRoom调用startGame，驱动游戏的开始
-*  3.mysql数据库虽然有多份实例，所有的数据库其实就是mysql数据库的一个客户端
+*  1.就在于 channel和gameRoom的绑定，这样保证一个房间独立出来。
+*  2.DouniuRoom调用startGame，驱动游戏的开始。
+*  3.mysql数据库虽然有多份实例，所有的数据库其实就是mysql数据库的一个客户端. 数据库服务器只有一个，因此暂时对于小用户量用户
+来说，足够了
 
